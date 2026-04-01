@@ -1,0 +1,9 @@
+__pycache__/
+*.pt
+*.jpg
+*.png
+uploads/
+runs/
+dataset*/
+results/
+static/uploads/
