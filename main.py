@@ -1,41 +1,45 @@
 from fastapi import FastAPI, UploadFile, File
-from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import JSONResponse
 from ultralytics import YOLO
-import uvicorn
-import os
+from PIL import Image
+import io
 
 app = FastAPI()
 
-# CORS engedélyezés
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=["*"],
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
-)
+# A modell lazy módon töltődik be, csak az első kérésnél
+model = None
 
-# YOLO modell betöltése HuggingFace-ről vagy URL-ről
-MODEL_URL = "https://huggingface.co/regenhuhu/tree-ai-model/resolve/main/yolov8n.pt"
-model = YOLO(MODEL_URL)
+def get_model():
+    global model
+    if model is None:
+        model = YOLO("yolov8n.pt")  # automatikusan letölti, ha nincs meg
+    return model
+
 
 @app.get("/")
 def root():
     return {"status": "Tree-AI backend running"}
 
-@app.post("/detect")
-async def detect(file: UploadFile = File(...)):
+
+@app.post("/predict")
+async def predict(file: UploadFile = File(...)):
+    # Kép beolvasása
     contents = await file.read()
-    temp_path = "temp.jpg"
+    image = Image.open(io.BytesIO(contents)).convert("RGB")
 
-    with open(temp_path, "wb") as f:
-        f.write(contents)
+    # Modell betöltése
+    model = get_model()
 
-    results = model(temp_path)
-    boxes = results[0].boxes.xyxy.tolist()
+    # Predikció
+    results = model(image)
 
-    os.remove(temp_path)
-    return {"detections": boxes}
+    # YOLO eredmények konvertálása JSON-ra
+    detections = []
+    for box in results[0].boxes:
+        detections.append({
+            "class": int(box.cls[0]),
+            "confidence": float(box.conf[0]),
+            "bbox": box.xyxy[0].tolist()
+        })
 
-if __name__ == "__main__":
-    uvicorn.run("main:app", host="0.0.0.0", port=int(os.environ.get("PORT", 8000)))
+    return JSONResponse({"detections": detections})
