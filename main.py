@@ -1,39 +1,30 @@
 from fastapi import FastAPI, UploadFile, File
 from fastapi.responses import JSONResponse
-from ultralytics import YOLO
 from PIL import Image
 import io
 
 app = FastAPI()
 
-# A modell lazy módon töltődik be, csak az első kérésnél
-model = None
-
-def get_model():
-    global model
-    if model is None:
-        model = YOLO("yolov8n.pt")  # automatikusan letölti, ha nincs meg
-    return model
-
-
 @app.get("/")
 def root():
     return {"status": "Tree-AI backend running"}
 
-
 @app.post("/predict")
 async def predict(file: UploadFile = File(...)):
+    # YOLO import csak itt, hogy ne foglaljon memóriát induláskor
+    from ultralytics import YOLO
+
+    # Modell betöltése (kicsi modell)
+    model = YOLO("yolov8n.pt")
+
     # Kép beolvasása
     contents = await file.read()
     image = Image.open(io.BytesIO(contents)).convert("RGB")
 
-    # Modell betöltése
-    model = get_model()
-
     # Predikció
     results = model(image)
 
-    # YOLO eredmények konvertálása JSON-ra
+    # Eredmények konvertálása
     detections = []
     for box in results[0].boxes:
         detections.append({
