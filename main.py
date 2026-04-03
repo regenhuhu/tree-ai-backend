@@ -2,8 +2,19 @@ from fastapi import FastAPI, UploadFile, File
 from fastapi.responses import JSONResponse
 from PIL import Image
 import io
+import subprocess
+import sys
 
 app = FastAPI()
+
+def ensure_ultralytics():
+    try:
+        import ultralytics
+    except ImportError:
+        subprocess.check_call([sys.executable, "-m", "pip", "install", "ultralytics==8.1.0"])
+    finally:
+        from ultralytics import YOLO
+        return YOLO
 
 @app.get("/")
 def root():
@@ -11,20 +22,14 @@ def root():
 
 @app.post("/predict")
 async def predict(file: UploadFile = File(...)):
-    # YOLO import csak itt, hogy ne foglaljon memóriát induláskor
-    from ultralytics import YOLO
-
-    # Modell betöltése (kicsi modell)
+    YOLO = ensure_ultralytics()
     model = YOLO("yolov8n.pt")
 
-    # Kép beolvasása
     contents = await file.read()
     image = Image.open(io.BytesIO(contents)).convert("RGB")
 
-    # Predikció
     results = model(image)
 
-    # Eredmények konvertálása
     detections = []
     for box in results[0].boxes:
         detections.append({
