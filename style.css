@@ -1,0 +1,610 @@
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    background: linear-gradient(135deg, #0f172a, #1e293b);
+    color: #e5e7eb;
+}
+
+.app-container {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 16px;
+}
+
+/* HEADER */
+header {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+header h1 {
+    margin: 0 0 8px;
+    font-size: 1.8rem;
+}
+.beta-info {
+    max-width: 800px;
+    margin: 10px auto 18px auto;
+    padding: 12px 18px;
+    background: rgba(56, 189, 248, 0.10);
+    border-left: 4px solid #38bdf8;
+    border-radius: 8px;
+    color: #cbd5e1;
+    font-size: 0.95rem;
+    line-height: 1.45;
+    text-align: center;
+}
+
+header p {
+    margin: 0;
+    color: #9ca3af;
+    font-size: 0.95rem;
+}
+
+/* CONTROLS – egy sorban, gap 40px */
+.controls {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 40px;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 20px;
+    padding: 16px;
+    background: rgba(15, 23, 42, 0.9);
+    border-radius: 12px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
+}
+
+/* FILE SELECT BUTTON */
+.file-box input[type="file"] {
+    display: none;
+}
+
+/* SLIDER */
+/* ============================
+   GYÖNYÖRŰ, MODERN GOMBOK
+============================ */
+
+/* Zöld – Fő művelet (Feltöltés és elemzés) */
+.primary-btn {
+    padding: 12px 26px;
+    border-radius: 999px;
+    border: none;
+    cursor: pointer;
+    background: linear-gradient(135deg, #22c55e, #16a34a);
+    color: #0f172a;
+    font-weight: 700;
+    font-size: 1rem;
+    letter-spacing: 0.3px;
+    box-shadow: 0 8px 18px rgba(34, 197, 94, 0.35);
+    transition: transform 0.15s ease, box-shadow 0.15s ease, filter 0.15s ease;
+}
+
+.primary-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 26px rgba(34, 197, 94, 0.45);
+    filter: brightness(1.08);
+}
+
+.primary-btn:active {
+    transform: translateY(0);
+    box-shadow: 0 6px 14px rgba(34, 197, 94, 0.3);
+}
+
+/* Kék – Másodlagos művelet (Kép kiválasztása, Kamera megnyitása) */
+.secondary-btn {
+    padding: 12px 26px;
+    border-radius: 999px;
+    border: none;
+    cursor: pointer;
+    background: linear-gradient(135deg, #38bdf8, #0ea5e9);
+    color: #0f172a;
+    font-weight: 700;
+    font-size: 1rem;
+    letter-spacing: 0.3px;
+    box-shadow: 0 8px 18px rgba(14, 165, 233, 0.35);
+    transition: transform 0.15s ease, box-shadow 0.15s ease, filter 0.15s ease;
+}
+
+.secondary-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 26px rgba(14, 165, 233, 0.45);
+    filter: brightness(1.08);
+}
+
+.secondary-btn:active {
+    transform: translateY(0);
+    box-shadow: 0 6px 14px rgba(14, 165, 233, 0.3);
+}
+
+.camera-section {
+    margin-top: 20px;
+    margin-bottom: 30px;   /* <<< EZ TÁVOLÍTJA EL A DRAG & DROP-TÓL */
+    text-align: center;    /* <<< KÖZÉPRE IGAZÍTJA A GOMBOT */
+    display: flex;
+    flex-direction: column;
+    align-items: center;   /* <<< MOBILON IS KÖZÉPRE TESZI */
+}
+.dropzone-section {
+    margin-top: 20px;
+    margin-bottom: 20px;
+    display: flex;
+    justify-content: center;   /* <<< KÖZÉPRE IGAZÍTJA */
+    align-items: center;
+    width: 100%;
+}
+
+.dropzone {
+    width: 100%;
+    max-width: 600px;
+    padding: 40px;
+    border: 3px dashed #38bdf8;   /* SZAGGATOTT KERET */
+    border-radius: 16px;
+    text-align: center;
+    color: #e5e7eb;
+    background: rgba(15, 23, 42, 0.6);
+    transition: 0.25s ease;
+    cursor: pointer;
+    font-size: 1.1rem;
+    letter-spacing: 0.3px;
+}
+
+.dropzone:hover {
+    background: rgba(30, 41, 59, 0.8);
+    border-color: #0ea5e9;
+}
+
+.dropzone.dragover {
+    background: rgba(14, 165, 233, 0.15);
+    border-color: #0ea5e9;
+    transform: scale(1.02);
+}
+.result-section, .preview-section {
+    margin-top: 20px;
+    margin-bottom: 20px;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;   /* <<< KÖZÉPRE IGAZÍTJA */
+    justify-content: center;
+    text-align: center;
+}
+/* ============================
+   RESPONSIVE – MOBIL & TABLET
+============================ */
+
+/* TABLET (max 1024px) */
+@media (max-width: 1024px) {
+
+    .controls {
+        gap: 20px;
+        padding: 14px;
+    }
+
+    .slider-box input[type=range] {
+        width: 260px;
+    }
+
+    .dropzone {
+        max-width: 500px;
+    }
+
+    #resultCanvas,
+    #previewImage {
+        max-width: 90%;
+    }
+}
+
+/* MOBIL (max 768px) */
+@media (max-width: 768px) {
+
+    /* Controls sor mobilon egymás alatt */
+    .controls {
+        flex-direction: column;
+        gap: 20px;
+        padding: 20px;
+    }
+
+    .slider-box {
+        width: 100%;
+        align-items: center;
+        text-align: center;
+    }
+
+    .slider-box input[type=range] {
+        width: 100%;
+    }
+
+    /* Gombok teljes szélességben mobilon */
+    .primary-btn,
+    .secondary-btn {
+        width: 100%;
+        max-width: 320px;
+    }
+
+    /* Kamera szekció középen */
+    .camera-section {
+        margin-top: 25px;
+        margin-bottom: 35px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    #cameraPreview {
+        max-width: 100%;
+    }
+
+    /* Drag & Drop középen */
+    .dropzone-section {
+        margin-top: 20px;
+        margin-bottom: 20px;
+        display: flex;
+        justify-content: center;
+        width: 100%;
+    }
+
+    .dropzone {
+        max-width: 100%;
+        padding: 30px;
+        font-size: 1rem;
+    }
+
+    /* Metszési ajánlat és eredeti kép középen */
+    .result-section,
+    .preview-section {
+        margin-top: 25px;
+        margin-bottom: 25px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    #resultCanvas,
+    #previewImage {
+        max-width: 100%;
+        margin: 0 auto;
+    }
+}
+
+/* EXTRA KIS MOBIL (max 480px) */
+@media (max-width: 480px) {
+
+    header h1 {
+        font-size: 1.4rem;
+    }
+
+    header p {
+        font-size: 0.85rem;
+    }
+
+    .dropzone {
+        padding: 24px;
+        font-size: 0.95rem;
+    }
+
+    .primary-btn,
+    .secondary-btn {
+        font-size: 0.9rem;
+        padding: 10px 20px;
+    }
+}
+
+/* ============================
+   NEXT VERSION INFO SECTION
+============================ */
+.next-version-info {
+    max-width: 900px;
+    margin: 60px auto 40px auto;
+    padding: 30px 25px;
+    background: rgba(30, 41, 59, 0.45);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 14px;
+    backdrop-filter: blur(6px);
+    color: #e2e8f0;
+}
+
+.next-version-info h2 {
+    text-align: center;
+    margin-bottom: 18px;
+    font-size: 1.6rem;
+    color: #38bdf8;
+}
+
+.next-version-info p {
+    text-align: center;
+    margin-bottom: 18px;
+    line-height: 1.55;
+}
+
+.next-version-info ul {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 20px 0;
+}
+
+.next-version-info ul li {
+    margin: 10px 0;
+    padding-left: 0;
+    font-size: 1rem;
+    line-height: 1.45;
+}
+
+.next-version-info ul li strong {
+    color: #a3e635;
+}
+
+.next-version-info .note {
+    font-size: 0.9rem;
+    text-align: center;
+    color: #94a3b8;
+}
+
+/* Mobilbarát */
+@media (max-width: 768px) {
+    .next-version-info {
+        padding: 22px 18px;
+    }
+    .next-version-info h2 {
+        font-size: 1.35rem;
+    }
+}
+
+
+/* ============================
+   FOOTER
+============================ */
+.footer {
+    margin-top: 40px;
+    padding: 25px 10px;
+    text-align: center;
+    color: #9ca3af;
+    font-size: 0.9rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+    background: rgba(15, 23, 42, 0.4);
+    backdrop-filter: blur(4px);
+}
+
+.footer-links {
+    margin-bottom: 10px;
+    display: flex;
+    justify-content: center;
+    gap: 25px;
+    flex-wrap: wrap;
+}
+
+.footer-links a {
+    color: #38bdf8;
+    text-decoration: none;
+    font-weight: 500;
+    transition: 0.2s ease;
+}
+
+.footer-links a:hover {
+    color: #0ea5e9;
+}
+
+.footer-copy {
+    font-size: 0.85rem;
+    color: #6b7280;
+}
+
+/* Mobilbarát footer */
+@media (max-width: 768px) {
+    .footer-links {
+        gap: 15px;
+    }
+}
+/* ============================
+   FOOTER – MODERN DARK STYLE
+============================ */
+.footer {
+    margin-top: 50px;
+    padding: 30px 10px;
+    text-align: center;
+    color: #9ca3af;
+    font-size: 0.9rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+    background: rgba(15, 23, 42, 0.4);
+    backdrop-filter: blur(6px);
+}
+
+/* Linkek */
+.footer-links {
+    margin-bottom: 14px;
+    display: flex;
+    justify-content: center;
+    gap: 28px;
+    flex-wrap: wrap;
+}
+
+.footer-links a {
+    color: #38bdf8;
+    text-decoration: none;
+    font-weight: 600;
+    transition: 0.2s ease;
+}
+
+.footer-links a:hover {
+    color: #0ea5e9;
+}
+
+/* Verzió + Made by */
+.footer-meta {
+    margin-bottom: 12px;
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    flex-wrap: wrap;
+    font-size: 0.9rem;
+}
+
+.footer-meta .version {
+    color: #a3e635; /* lime green */
+    font-weight: 600;
+}
+
+.footer-meta .madeby {
+    color: #f472b6; /* pink */
+    font-weight: 600;
+}
+
+/* Copyright */
+.footer-copy {
+    font-size: 0.8rem;
+    color: #6b7280;
+}
+
+/* Mobilbarát footer */
+@media (max-width: 768px) {
+    .footer-links {
+        gap: 18px;
+    }
+    .footer-meta {
+        gap: 12px;
+    }
+}
+.ai-logo {
+    font-weight: 800;
+    letter-spacing: 1px;
+    color: #38bdf8; /* világoskék, AI‑tech szín */
+    font-family: "Segoe UI", system-ui, sans-serif;
+    padding: 2px 6px;
+    border-radius: 6px;
+    background: rgba(56, 189, 248, 0.12);
+    border: 1px solid rgba(56, 189, 248, 0.25);
+}
+/* ============================
+   COOKIE BANNER
+============================ */
+.cookie-banner {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 95%;
+    max-width: 600px;
+    background: rgba(52, 80, 147, 0.95);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 14px;
+    padding: 18px 22px;
+    box-shadow: 0 12px 30px rgba(0,0,0,0.45);
+    backdrop-filter: blur(6px);
+    color: #e5e7eb;
+    font-size: 0.95rem;
+    z-index: 9999;
+    display: none; /* alapból rejtve, JS mutatja */
+}
+
+.cookie-banner p {
+    margin: 0 0 12px 0;
+    line-height: 1.45;
+    text-align: center;
+}
+
+.cookie-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 16px;
+}
+
+/* Mobilbarát */
+@media (max-width: 480px) {
+    .cookie-banner {
+        padding: 16px;
+    }
+    .cookie-buttons {
+        flex-direction: column;
+        gap: 10px;
+    }
+	.cookie-buttons {
+        flex-direction: column;
+    }
+    .info-btn {
+        text-align: center;
+        width: 100%;
+    }
+}
+.info-btn {
+    padding: 8px 14px;
+    border-radius: 6px;
+    font-size: 0.9rem;
+    text-decoration: none;
+    background: rgba(148, 163, 184, 0.15);
+    border: 1px solid rgba(148, 163, 184, 0.25);
+    color: #cbd5e1;
+    transition: 0.2s ease;
+}
+
+.info-btn:hover {
+    background: rgba(148, 163, 184, 0.25);
+    border-color: rgba(148, 163, 184, 0.4);
+}
+
+.cookie-privacy-short {
+    margin-top: 10px;margin-bottom:30px;
+    text-align: center;
+    font-size: 0.8rem;
+    color: #94a3b8;
+}
+
+.cookie-privacy-short .icon {
+    margin-right: 4px;
+}
+
+.cookie-privacy-short a {
+    color: #38bdf8;
+    text-decoration: none;
+}
+
+.cookie-privacy-short a:hover {
+    text-decoration: underline;
+}
+.recommendations {
+    margin-top: 20px;
+    padding: 10px;
+}
+
+.recommendation-item {
+    border-radius: 8px;
+    padding: 12px;
+    margin-bottom: 10px;
+    color: white;
+    font-size: 15px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.recommendation-item .icon {
+    font-size: 20px;
+}
+
+.priority-0 { background-color: #c62828; } /* piros – sürgős */
+.priority-1 { background-color: #ef6c00; } /* narancs – fontos */
+.priority-2 { background-color: #f9a825; } /* sárga – ajánlott */
+.priority-3 { background-color: #558b2f; } /* zöld – opcionális */
+.priority-4 { background-color: #2e7d32; } /* sötétebb zöld */
+
+.plan {
+    margin-top: 20px;
+    padding: 10px;
+}
+
+.plan-item {
+    border-radius: 8px;
+    padding: 10px;
+    margin-bottom: 8px;
+    background-color: #0f172a;
+    color: #e5e7eb;
+    font-size: 14px;
+    border-left: 4px solid #22c55e;
+}
+
+.plan-item strong {
+    color: #a5b4fc;
+}
+

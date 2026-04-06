@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+    <meta charset="UTF-8">
+    <title>Tree-AI – Képfelismerés</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="app-container">
+
+    <!-- FEJLÉC -->
+    <header>
+        <h1>Tree-AI – Metszési pontok felismerése</h1>
+<p class="beta-info">
+    Ez a rendszer jelenleg <strong>béta verzió</strong>. A feltöltött képen a program színes jelölésekkel jelzi a felismert metszési pontokat, minden szín egy külön találatot jelöl. A biztonsági szinteket csúszkával szabályozhatod, hogy a rendszer mennyire legyen szigorú: alacsonyabb értéknél több, magasabb értéknél kevesebb szín és találat jelenik meg (alap a "mérsékelt beállítás": Confidence: 0.10).
+</p>
+<p><b>Lépések: </b>Válassz egy képet, állítsd be a biztonsági szintet (a csúszkával), majd kattints a "Feltöltés és elemzés" gombra, vagy készíts fotót mobilról.</p>
+    </header>
+
+    <!-- 1) FELSŐ SOR: FILE SELECT + SLIDER + FELTÖLTÉS -->
+    <section class="controls">
+
+        <!-- Fájl kiválasztása -->
+        <div class="file-box">
+            <input type="file" id="fileInput" accept="image/*" hidden>
+            <button class="secondary-btn" onclick="triggerFileInput()">📁 Kép kiválasztása</button>
+        </div>
+
+        <!-- Confidence csúszka -->
+        <div class="slider-box">
+            <label>Confidence: <span id="confValue">0.10</span></label>
+            <input type="range" id="confSlider" min="0.01" max="0.50" step="0.01" value="0.10">
+        </div>
+
+        <!-- Feltöltés és elemzés -->
+        <button class="primary-btn" onclick="uploadImage()">Feltöltés és elemzés</button>
+
+    </section>
+
+    <!-- 2) MOBIL KAMERA GOMB -->
+    <section class="camera-section">
+        <button class="secondary-btn" onclick="openCamera()">📷 Mobil kép készítése</button>
+
+        <div id="cameraContainer" class="camera-container" style="display:none;">
+            <video id="cameraPreview" autoplay playsinline></video>
+            <button class="primary-btn" onclick="takePhoto()">📸 Fotó készítése</button>
+        </div>
+    </section>
+    <!-- 3) DRAG & DROP -->
+    <section class="dropzone-section">
+        <div id="dropzone" class="dropzone">
+            <p>Húzd ide a képet vagy kattints a feltöltéshez</p>
+        </div>
+    </section>
+
+    <!-- 4) METSZÉSI AJÁNLAT (YOLO eredmény) -->
+    <section class="result-section">
+        <h2>Metszési ajánlat</h2>
+        <canvas id="resultCanvas"></canvas>
+    </section>
+
+    <!-- 5) EREDETI FELTÖLTÖTT KÉP -->
+    <section class="preview-section">
+        <h2>Eredeti feltöltött kép</h2>
+        <img id="previewImage" class="preview-image" style="display:none;">
+    </section>
+<div id="recommendations-container" class="recommendations"></div>
+<div id="plan-container" class="plan"></div>
+
+</div>
+<section class="next-version-info">
+    <h2>Következő verzió – Metszési ajánló fejlesztések</h2>
+    <p>
+        A Tree‑AI következő kiadásában a rendszer nemcsak felismeri a metszési pontokat, 
+        hanem fejlettebb elemzést is nyújt. A cél egy olyan szakértői asszisztens, amely 
+        támogatja a helyes metszési döntéseket.
+    </p>
+
+    <ul>
+        <li><strong>Prioritási sorrend:</strong> a rendszer megállapítja, mely pontokat érdemes először metszeni.</li>
+        <li><strong>Metszési irány javaslat:</strong> vizuális jelölés arról, milyen irányban ajánlott a vágás.</li>
+        <li><strong>Ajánlott / nem ajánlott pontok:</strong> színkódolt értékelés a metszési minőség alapján.</li>
+        <li><strong>Intelligens szűrés:</strong> a modell felismeri a túl közeli, rossz szögű vagy kockázatos pontokat.</li>
+        <li><strong>Fejlettebb pontosság:</strong> továbbfejlesztett tanítás több ezer új annotált képpel.</li>
+    </ul>
+
+    <p class="note">
+        Ezek a funkciók jelenleg fejlesztés alatt állnak, és a Tree‑AI következő verziójában válnak elérhetővé.
+    </p>
+</section>
+
+<footer class="footer">
+    <div class="footer-links">
+        <a href="https://regen.hu" target="_blank">regen.hu</a>
+        <a href="https://amkha.hu" target="_blank">amkha.hu</a>
+        <a href="#">Kapcsolat</a>
+    </div>
+
+    <div class="footer-meta">
+        <span class="version">Tree‑AI v1.2</span>
+        <span class="madeby">Made with <span class="ai-logo">AI◦</span> by Karcsi</span>
+    </div>
+
+    <div class="footer-copy">
+        © 2024–2026 Tree‑AI • Oktatási és demonstrációs célú alkalmazás
+    </div>
+</footer>
+<div id="cookieBanner" class="cookie-banner">
+    <p>
+        A Tree‑AI sütiket használ a működéshez és a felhasználói élmény javításához.
+    </p>
+
+    <div class="cookie-buttons">
+        <button class="primary-btn" onclick="acceptCookies()">Elfogadom</button>
+        <button class="secondary-btn" onclick="declineCookies()">Elutasítom</button>
+        <a href="privacy.html" target="_blank" class="info-btn">További információk</a>
+    </div>
+</div>
+
+<div class="cookie-privacy-short">
+    <span class="icon">🔒</span>
+    A feltöltött képek a Tree‑AI fejlesztéséhez járulnak hozzá, nem kerülnek nyilvánosságra. 
+    <a href="privacy.html" target="_blank">Részletek</a>
+</div>
+
+<script src="script.js" defer></script>
+</body>
+</html>
