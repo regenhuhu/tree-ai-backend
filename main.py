@@ -1,12 +1,3 @@
-from fastapi import FastAPI, UploadFile, File
-from fastapi.middleware.cors import CORSMiddleware
-from ultralytics import YOLO
-import uvicorn
-import os
-import tempfile
-
-app = FastAPI()
-
 # ============================
 # CORS engedélyezés
 # ============================
